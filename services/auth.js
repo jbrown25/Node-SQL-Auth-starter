@@ -14,7 +14,8 @@ exports.createUserToken = user => {
 	return jwt.sign(userData, process.env.SECRET, {expiresIn: '7d'});
 };
 
-//middleware to 
+//middleware to check if valid token is in the header as "authorization"
+//if valid, passes some user data to next middleware in res.locals
 exports.isAuthenticated = (req, res, next) => {
 	const token = req.header('authorization');
 	if(!token) return res.status(401).send({error: 'Token required'});
