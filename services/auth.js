@@ -30,3 +30,28 @@ exports.isAuthenticated = (req, res, next) => {
 	res.locals.authenticatedUser = userFromToken;
 	next();
 };
+
+//some routes don't necessarily require authentication
+//Adds user data to res.locals if authenticated, otherwise just passes to next middleware
+exports.isAuthenticatedOrGuest = (req, res, next) => {
+	const token = req.header('authorization');
+	if(!token){
+		return next();
+	}else{
+		try {
+			const parsedToken = jwt.verify(token, process.env.SECRET);
+			
+			//check token, make sure not expired (?)
+			const userFromToken = {
+				id: parsedToken.sub,
+				username: parsedToken.username,
+				email: parsedToken.email
+			};
+			res.locals.authenticatedUser = userFromToken;
+			next();
+		}catch(error){
+			console.log(error);
+			next();
+		}
+	}
+};

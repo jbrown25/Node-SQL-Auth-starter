@@ -23,7 +23,7 @@ app.use('/user', userRoutes);
 
 
 app.use('/', (req, res, next) => {
-	res.status(404).send({errorMessage: 'boy you lost'});
+	res.status(404).send({error: 'boy you lost'});
 });
 
 //configure database and launch app
