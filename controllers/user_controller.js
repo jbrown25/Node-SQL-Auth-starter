@@ -10,8 +10,15 @@ exports.getUserData = (req, res, next) => {
 	User.findOne({where: {id: authenticatedUser.id}})
 		.then(result => {
 			if(!result) throw {error: 'user not found somehow.'};
-			console.log(result);
-			return res.status(200).send(result);
+			
+			//should return new object without timestamps, hash
+			const userFromDb = {
+				id: result.id,
+				username: result.username,
+				email: result.email
+			};
+			//return user data pulled from db
+			return res.status(200).send(userFromDb);
 		})
 		.catch(err => {
 			console.log(err);
